@@ -1,0 +1,9 @@
+C:\Users\Administrator\Desktop\GGD值班\PrintTest\PrintTest\bin\Debug\PrintTest.exe.config
+C:\Users\Administrator\Desktop\GGD值班\PrintTest\PrintTest\bin\Debug\PrintTest.exe
+C:\Users\Administrator\Desktop\GGD值班\PrintTest\PrintTest\bin\Debug\PrintTest.pdb
+C:\Users\Administrator\Desktop\GGD值班\PrintTest\PrintTest\obj\Debug\PrintTest.csprojAssemblyReference.cache
+C:\Users\Administrator\Desktop\GGD值班\PrintTest\PrintTest\obj\Debug\PrintTest.Form1.resources
+C:\Users\Administrator\Desktop\GGD值班\PrintTest\PrintTest\obj\Debug\PrintTest.Properties.Resources.resources
+C:\Users\Administrator\Desktop\GGD值班\PrintTest\PrintTest\obj\Debug\PrintTest.csproj.GenerateResource.cache
+C:\Users\Administrator\Desktop\GGD值班\PrintTest\PrintTest\obj\Debug\PrintTest.exe
+C:\Users\Administrator\Desktop\GGD值班\PrintTest\PrintTest\obj\Debug\PrintTest.pdb
