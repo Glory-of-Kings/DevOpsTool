@@ -96,9 +96,9 @@ namespace JieLinkSyncTool
         Dictionary<string, string> dictBoxConnStr = new Dictionary<string, string>();
         private void CheckBoxConnStr()
         {
+            ShowMessage("正在检测盒子的数据库连接，请等待！");
             string sql = "SELECT IP from control_devices where DeviceType = 25";
             DataTable dt = MySqlHelper.ExecuteDataset(DbConnectString, sql).Tables[0];
-            ShowMessage("正在检测盒子的数据库连接，请等待！");
             if (dt != null)
             {
                 foreach (DataRow dr in dt.Rows)
