@@ -79,10 +79,15 @@ namespace JieLinkSyncTool
             try
             {
                 MySqlHelper.ExecuteDataset(DbConnectString, "select * from sys_user limit 1");
-                ShowMessage("数据库连接成功！");
+                ShowMessage("中心数据库连接成功！");
                 CheckBoxConnStr();
-                this.btnTestConn.Enabled = false;
-                this.btnStartTask.Enabled = true;
+                if (dictBoxConnStr.Count > 0)
+                {
+                    this.btnTestConn.Enabled = false;
+                    this.btnStartTask.Enabled = true;
+                }
+                else
+                { ShowMessage("没有获取到任何盒子的连接信息！"); }
             }
             catch (Exception)
             {
@@ -178,7 +183,7 @@ namespace JieLinkSyncTool
                         backgroundWorker.ReportProgress(1, $"获取盒子{ip}数据异常，跳过");
                         continue;
                     }
-                    
+
 
                     var boxNotExists = centerDatas.Where(a => !boxDatas.Exists(t => a.Id == t.Id)).ToList();
                     if (boxNotExists.Count <= 0)
