@@ -184,8 +184,7 @@ namespace JieLinkSyncTool
                         continue;
                     }
 
-
-                    var boxNotExists = centerDatas.Where(a => !boxDatas.Exists(t => a.Id == t.Id)).ToList();
+                    var boxNotExists = centerDatas.Where(a => !boxDatas.Exists(t => a.Id == t.Id)).OrderBy(x=>x.Id).ToList();
                     if (boxNotExists.Count <= 0)
                     {
                         backgroundWorker.ReportProgress(1, $"盒子{ip}的数据与中心一致");
@@ -206,8 +205,8 @@ namespace JieLinkSyncTool
         {
             backgroundWorker.ReportProgress(1, "查询sync_box_http表");
             List<SyncBoxEntity> syncBoxEntities = new List<SyncBoxEntity>();
-            string sql = $"select id,protocoldata,datatype from sync_box_http where ObjId like '%{cmd}' and DATE_ADD(AddTime, INTERVAL {day} DAY)> NOW() limit {limit}";
-
+            string sql = $"select id,protocoldata,datatype from sync_box_http where ObjId like '%{cmd}' and DATE_ADD(AddTime, INTERVAL {day} DAY)> NOW() ORDER BY id desc limit {limit}";
+            //backgroundWorker.ReportProgress(1, sql);
             DataTable dt = MySqlHelper.ExecuteDataset(DbConnectString, sql).Tables[0];
             if (dt != null)
             {
@@ -230,6 +229,7 @@ namespace JieLinkSyncTool
             backgroundWorker.ReportProgress(1, "查询sync_center_downloadprocess表");
             List<SyncBoxEntity> syncBoxEntities = new List<SyncBoxEntity>();
             string sql = $"select downloadid,jsondata,datatype from sync_center_downloadprocess where serviceid = '{cmd}' and downloadid>={minId}";
+            //backgroundWorker.ReportProgress(1, sql);
             DataTable dt = MySqlHelper.ExecuteDataset(ConnString, sql).Tables[0];
             if (dt != null)
             {

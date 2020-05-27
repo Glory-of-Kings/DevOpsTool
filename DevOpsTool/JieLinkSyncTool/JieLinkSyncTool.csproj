@@ -55,6 +55,8 @@
     <Compile Include="DbConfig.Designer.cs">
       <DependentUpon>DbConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="DbConfigEntity.cs" />
+    <Compile Include="DbConnEntity.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
