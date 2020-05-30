@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace JieLinkSyncTool
 {
@@ -19,6 +21,21 @@ namespace JieLinkSyncTool
             backgroundWorker.WorkerReportsProgress = true;
             backgroundWorker.ProgressChanged += BackgroundWorker_ProgressChanged;
             backgroundWorker.DoWork += BackgroundWorker_DoWork;
+
+
+            //读取到配置文件，加载参数
+            DbConfig.CenterDbConnStr = new DbConnEntity();
+            DbConfig.BoxDbConnStrs = new List<DbConnEntity>();
+            if (File.Exists(@"DbCenterConfig.ini"))
+            {
+                string ReadStr = File.ReadAllText(@"DbCenterConfig.ini");
+                DbConfig.CenterDbConnStr = JsonConvert.DeserializeObject<DbConnEntity>(ReadStr);
+                txtCenterIp.Text = DbConfig.CenterDbConnStr.Ip;
+                txtCenterDbPort.Text = DbConfig.CenterDbConnStr.Port.ToString();
+                txtCenterDbUser.Text = DbConfig.CenterDbConnStr.UserName;
+                txtCenterDbPwd.Text = DbConfig.CenterDbConnStr.Password;
+                txtCenterDb.Text = DbConfig.CenterDbConnStr.DbName;
+            }
         }
 
         /// <summary>
@@ -47,6 +64,10 @@ namespace JieLinkSyncTool
         /// </summary>
         public string DbConnectString { get; set; }
 
+        /// <summary>
+        /// 连接字符串配置
+        /// </summary>
+        public DbConfigEntity DbConfig = new DbConfigEntity();
 
         BackgroundWorker backgroundWorker = new BackgroundWorker();
         private void btnStartTask_Click(object sender, EventArgs e)
@@ -80,6 +101,8 @@ namespace JieLinkSyncTool
             {
                 MySqlHelper.ExecuteDataset(DbConnectString, "select * from sys_user limit 1");
                 ShowMessage("中心数据库连接成功！");
+                //存储中心连接字符串
+                SaveCenterDbConfig(DbConfig);
                 CheckBoxConnStr();
                 if (dictBoxConnStr.Count > 0)
                 {
@@ -89,8 +112,9 @@ namespace JieLinkSyncTool
                 else
                 { ShowMessage("没有获取到任何盒子的连接信息！"); }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                string str = ex.ToString(); 
                 MessageBox.Show("数据库连接失败！");
             }
         }
@@ -113,13 +137,19 @@ namespace JieLinkSyncTool
                     {
                         continue;
                     }
+                    
                     string boxConn = $"Data Source={ip};port=10080;User ID=test;Password=123456;Initial Catalog=smartbox;";
+
+                    //读取到盒子配置文件，加载参数
+                    ReadBoxConfig(ref boxConn,ip);
 
                     try
                     {
                         string cmd = "select * from sys_boxinformation";
                         MySqlHelper.ExecuteDataset(boxConn, cmd);
                         ShowMessage($"盒子{ip}连接成功");
+                        //存储盒子连接字符串
+                        SaveBoxDbConfig(DbConfig, boxConn);
                         dictBoxConnStr.Add(ip, boxConn);
                     }
                     catch (Exception)
@@ -128,10 +158,15 @@ namespace JieLinkSyncTool
                         if (dbConfig.ShowDialog() == DialogResult.OK)
                         {
                             ShowMessage($"盒子{ip}连接成功");
+                            //存储盒子连接字符串
+                            SaveBoxDbConfig(DbConfig, dbConfig.DbConnString);
                             dictBoxConnStr.Add(ip, dbConfig.DbConnString);
                         }
                     }
                 }
+                //全部保存盒子字符串后保存到文件
+                SaveBoxDbConfigFile(DbConfig);
+
             }
 
         }
@@ -205,7 +240,7 @@ namespace JieLinkSyncTool
         {
             backgroundWorker.ReportProgress(1, "查询sync_box_http表");
             List<SyncBoxEntity> syncBoxEntities = new List<SyncBoxEntity>();
-            string sql = $"select id,protocoldata,datatype from sync_box_http where ObjId like '%{cmd}' and DATE_ADD(AddTime, INTERVAL {day} DAY)> NOW() ORDER BY id desc limit {limit}";
+            string sql = $"select id,protocoldata,datatype from sync_box_http where ObjId like '%{cmd}' and onlyboxid = '' and DATE_ADD(AddTime, INTERVAL {day} DAY)> NOW() ORDER BY id desc limit {limit}";
             //backgroundWorker.ReportProgress(1, sql);
             DataTable dt = MySqlHelper.ExecuteDataset(DbConnectString, sql).Tables[0];
             if (dt != null)
@@ -303,6 +338,52 @@ namespace JieLinkSyncTool
         {
             isExit = true;
             this.Close();
+        }
+
+        private void SaveCenterDbConfig(DbConfigEntity dbconfig)
+        {
+            dbconfig.CenterDbConnStr.Ip = txtCenterIp.Text;
+            dbconfig.CenterDbConnStr.Port = Convert.ToInt32( txtCenterDbPort.Text);
+            dbconfig.CenterDbConnStr.UserName = txtCenterDbUser.Text;
+            dbconfig.CenterDbConnStr.Password = txtCenterDbPwd.Text;
+            dbconfig.CenterDbConnStr.DbName = txtCenterDb.Text;
+
+            System.IO.File.WriteAllText("DbCenterConfig.ini", JsonConvert.SerializeObject(dbconfig.CenterDbConnStr), Encoding.UTF8);
+        }
+
+        private void SaveBoxDbConfig(DbConfigEntity dbconfig,string conbox)
+        {
+            //string boxConn = $"Data Source={ip};port=10080;User ID=test;Password=123456;Initial Catalog=smartbox;";
+
+            string[] strsplit = conbox.Split(new char[2] { '=', ';' });
+            DbConnEntity boxcon = new DbConnEntity();
+            boxcon.Ip = strsplit[1];
+            boxcon.Port = Convert.ToInt32( strsplit[3]);
+            boxcon.UserName = strsplit[5];
+            boxcon.Password = strsplit[7];
+            boxcon.DbName = strsplit[9];
+            dbconfig.BoxDbConnStrs.Add(boxcon);
+
+        }
+
+        private void SaveBoxDbConfigFile(DbConfigEntity dbconfig)
+        {
+            System.IO.File.WriteAllText("DbBoxConfig.ini", JsonConvert.SerializeObject(dbconfig.BoxDbConnStrs), Encoding.UTF8);
+        }
+
+        private void ReadBoxConfig(ref string str,string ip)
+        {
+            if (File.Exists(@"DbBoxConfig.ini"))
+            {
+                string ReadStr = File.ReadAllText(@"DbBoxConfig.ini");
+                DbConfig.BoxDbConnStrs = JsonConvert.DeserializeObject<List<DbConnEntity>>(ReadStr);
+                DbConnEntity find = DbConfig.BoxDbConnStrs.Find(a => a.Ip == ip);
+                if (find != null)
+                    str = $"Data Source={find.Ip};port={find.Port};User ID={find.UserName};Password={find.Password};Initial Catalog={find.DbName};";
+                else
+                    return;
+            }
+            return;
         }
     }
 }
