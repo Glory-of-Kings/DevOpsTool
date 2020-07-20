@@ -185,6 +185,8 @@ namespace JieLinkSyncTool
             while (isRuning)
             {
                 StartCompareData();
+
+
                 System.Threading.Thread.Sleep(LoopSecond * 1000);
             }
 
@@ -229,6 +231,7 @@ namespace JieLinkSyncTool
                         InsertData(dictBoxConnStr[ip], entity);
                     }
                 }
+
             }
         }
 
@@ -298,6 +301,9 @@ namespace JieLinkSyncTool
             {
                 rtxShowMessage.AppendText(message);
                 rtxShowMessage.AppendText(Environment.NewLine);
+                //超过一定长度后清空richtextbox
+                if (rtxShowMessage.TextLength > 5000)
+                    rtxShowMessage.Clear();
             }
             catch (Exception)
             {
