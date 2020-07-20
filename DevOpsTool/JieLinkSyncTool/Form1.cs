@@ -185,6 +185,8 @@ namespace JieLinkSyncTool
             while (isRuning)
             {
                 StartCompareData();
+
+
                 System.Threading.Thread.Sleep(LoopSecond * 1000);
             }
 
@@ -229,6 +231,7 @@ namespace JieLinkSyncTool
                         InsertData(dictBoxConnStr[ip], entity);
                     }
                 }
+
             }
         }
 
