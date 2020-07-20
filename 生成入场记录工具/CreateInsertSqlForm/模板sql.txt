@@ -1,0 +1,1 @@
+insert into box_enter_record (CredentialType,CredentialNO,Plate,CarNumOrig,EnterTime,SetmealType,SealName,EGuid,EnterRecordID,EnterDeviceID,EnterBoxID,InDeviceEnterType,WasGone,IsSignatory) VALUES('163','{0}','{0}','{0}','{1}','54','{2}',UUID(),REPLACE(UUID(),'-',''),,'173712128','3293110528','1','0','-1');
