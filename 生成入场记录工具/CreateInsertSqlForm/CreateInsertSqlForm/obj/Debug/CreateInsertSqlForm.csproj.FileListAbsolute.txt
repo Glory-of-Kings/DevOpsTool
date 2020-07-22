@@ -1,0 +1,10 @@
+E:\ding\生成入场记录工具\CreateInsertSqlForm\CreateInsertSqlForm\bin\Debug\CreateInsertSqlForm.exe.config
+E:\ding\生成入场记录工具\CreateInsertSqlForm\CreateInsertSqlForm\bin\Debug\CreateInsertSqlForm.exe
+E:\ding\生成入场记录工具\CreateInsertSqlForm\CreateInsertSqlForm\bin\Debug\CreateInsertSqlForm.pdb
+E:\ding\生成入场记录工具\CreateInsertSqlForm\CreateInsertSqlForm\obj\Debug\CreateInsertSqlForm.Form1.resources
+E:\ding\生成入场记录工具\CreateInsertSqlForm\CreateInsertSqlForm\obj\Debug\CreateInsertSqlForm.Properties.Resources.resources
+E:\ding\生成入场记录工具\CreateInsertSqlForm\CreateInsertSqlForm\obj\Debug\CreateInsertSqlForm.csproj.GenerateResource.cache
+E:\ding\生成入场记录工具\CreateInsertSqlForm\CreateInsertSqlForm\obj\Debug\CreateInsertSqlForm.csproj.CoreCompileInputs.cache
+E:\ding\生成入场记录工具\CreateInsertSqlForm\CreateInsertSqlForm\obj\Debug\CreateInsertSqlForm.exe
+E:\ding\生成入场记录工具\CreateInsertSqlForm\CreateInsertSqlForm\obj\Debug\CreateInsertSqlForm.pdb
+E:\ding\生成入场记录工具\CreateInsertSqlForm\CreateInsertSqlForm\obj\Debug\CreateInsertSqlForm.csprojAssemblyReference.cache
