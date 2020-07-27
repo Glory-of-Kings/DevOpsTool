@@ -56,6 +56,7 @@
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.chbVersion = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -199,6 +200,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.chbVersion);
             this.groupBox2.Controls.Add(this.txtCmd);
             this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.txtCheckRow);
@@ -278,7 +280,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 69);
+            this.label8.Location = new System.Drawing.Point(9, 69);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(65, 12);
             this.label8.TabIndex = 24;
@@ -299,14 +301,25 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnExit});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(101, 26);
             // 
             // btnExit
             // 
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(180, 22);
+            this.btnExit.Size = new System.Drawing.Size(100, 22);
             this.btnExit.Text = "退出";
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            // 
+            // chbVersion
+            // 
+            this.chbVersion.AutoSize = true;
+            this.chbVersion.Location = new System.Drawing.Point(17, 185);
+            this.chbVersion.Name = "chbVersion";
+            this.chbVersion.Size = new System.Drawing.Size(66, 16);
+            this.chbVersion.TabIndex = 33;
+            this.chbVersion.Text = "2.0以下";
+            this.chbVersion.UseVisualStyleBackColor = true;
+            this.chbVersion.CheckedChanged += new System.EventHandler(this.chbVersion_CheckedChanged);
             // 
             // Form1
             // 
@@ -359,6 +372,7 @@
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem btnExit;
+        private System.Windows.Forms.CheckBox chbVersion;
     }
 }
 

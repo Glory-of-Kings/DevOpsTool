@@ -73,7 +73,8 @@ namespace JieLinkSyncTool
         private void btnStartTask_Click(object sender, EventArgs e)
         {
             //1.获取所有的界面配置
-            Cmds = txtCmd.Text.Split('\n').ToList();
+            string cmds = txtCmd.Text.Replace("\r", "");
+            Cmds = cmds.Split('\n').ToList();
             Day = int.Parse(txtCheckDay.Text);
             Limit = int.Parse(txtCheckRow.Text);
             LoopSecond = int.Parse(txtLoopSecond.Text);
@@ -114,7 +115,7 @@ namespace JieLinkSyncTool
             }
             catch (Exception ex)
             {
-                string str = ex.ToString(); 
+                string str = ex.ToString();
                 MessageBox.Show("数据库连接失败！");
             }
         }
@@ -137,11 +138,11 @@ namespace JieLinkSyncTool
                     {
                         continue;
                     }
-                    
+
                     string boxConn = $"Data Source={ip};port=10080;User ID=test;Password=123456;Initial Catalog=smartbox;";
 
                     //读取到盒子配置文件，加载参数
-                    ReadBoxConfig(ref boxConn,ip);
+                    ReadBoxConfig(ref boxConn, ip);
 
                     try
                     {
@@ -219,7 +220,7 @@ namespace JieLinkSyncTool
                         continue;
                     }
 
-                    var boxNotExists = centerDatas.Where(a => !boxDatas.Exists(t => a.Id == t.Id)).OrderBy(x=>x.Id).ToList();
+                    var boxNotExists = centerDatas.Where(a => !boxDatas.Exists(t => a.Id == t.Id)).OrderBy(x => x.Id).ToList();
                     if (boxNotExists.Count <= 0)
                     {
                         backgroundWorker.ReportProgress(1, $"盒子{ip}的数据与中心一致");
@@ -299,8 +300,8 @@ namespace JieLinkSyncTool
                 rtxShowMessage.AppendText(message);
                 rtxShowMessage.AppendText(Environment.NewLine);
                 //超过一定长度后清空richtextbox
-                if (rtxShowMessage.TextLength > 5000)
-                    rtxShowMessage.Clear();
+                if (rtxShowMessage.Lines.Length > 2000)
+                { rtxShowMessage.Clear(); }
             }
             catch (Exception)
             {
@@ -346,7 +347,7 @@ namespace JieLinkSyncTool
         private void SaveCenterDbConfig(DbConfigEntity dbconfig)
         {
             dbconfig.CenterDbConnStr.Ip = txtCenterIp.Text;
-            dbconfig.CenterDbConnStr.Port = Convert.ToInt32( txtCenterDbPort.Text);
+            dbconfig.CenterDbConnStr.Port = Convert.ToInt32(txtCenterDbPort.Text);
             dbconfig.CenterDbConnStr.UserName = txtCenterDbUser.Text;
             dbconfig.CenterDbConnStr.Password = txtCenterDbPwd.Text;
             dbconfig.CenterDbConnStr.DbName = txtCenterDb.Text;
@@ -354,14 +355,14 @@ namespace JieLinkSyncTool
             System.IO.File.WriteAllText("DbCenterConfig.ini", JsonConvert.SerializeObject(dbconfig.CenterDbConnStr), Encoding.UTF8);
         }
 
-        private void SaveBoxDbConfig(DbConfigEntity dbconfig,string conbox)
+        private void SaveBoxDbConfig(DbConfigEntity dbconfig, string conbox)
         {
             //string boxConn = $"Data Source={ip};port=10080;User ID=test;Password=123456;Initial Catalog=smartbox;";
 
             string[] strsplit = conbox.Split(new char[2] { '=', ';' });
             DbConnEntity boxcon = new DbConnEntity();
             boxcon.Ip = strsplit[1];
-            boxcon.Port = Convert.ToInt32( strsplit[3]);
+            boxcon.Port = Convert.ToInt32(strsplit[3]);
             boxcon.UserName = strsplit[5];
             boxcon.Password = strsplit[7];
             boxcon.DbName = strsplit[9];
@@ -374,7 +375,7 @@ namespace JieLinkSyncTool
             System.IO.File.WriteAllText("DbBoxConfig.ini", JsonConvert.SerializeObject(dbconfig.BoxDbConnStrs), Encoding.UTF8);
         }
 
-        private void ReadBoxConfig(ref string str,string ip)
+        private void ReadBoxConfig(ref string str, string ip)
         {
             if (File.Exists(@"DbBoxConfig.ini"))
             {
@@ -387,6 +388,18 @@ namespace JieLinkSyncTool
                     return;
             }
             return;
+        }
+
+        private void chbVersion_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chbVersion.Checked)
+            {
+                txtCmd.Text = "742\r\n743\r\n820\r\n821\r\n74A";
+            }
+            else
+            {
+                txtCmd.Text = "82A";
+            }
         }
     }
 }
