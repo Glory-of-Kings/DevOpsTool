@@ -283,6 +283,7 @@ namespace JieLinkSyncTool
         /// <param name="syncBoxEntity"></param>
         private void InsertData(string ConnString, SyncBoxEntity syncBoxEntity)
         {
+            syncBoxEntity.JsonData = syncBoxEntity.JsonData.TrimStart('[').TrimEnd(']');
             string sql = $"INSERT INTO `sync_center_downloadprocess`(downloadid, serviceid, jsondata, status, processtime, datatype, remark) VALUES ({syncBoxEntity.Id},'{syncBoxEntity.Cmd}','{syncBoxEntity.JsonData}','0',NOW(),{syncBoxEntity.DataType},'add by auto tool')";
             MySqlHelper.ExecuteNonQuery(ConnString, sql);
             backgroundWorker.ReportProgress(1, $"插入遗漏数据Id={syncBoxEntity.Id} 命令字={syncBoxEntity.Cmd}");
@@ -394,7 +395,7 @@ namespace JieLinkSyncTool
         {
             if (chbVersion.Checked)
             {
-                txtCmd.Text = "742\r\n743\r\n820\r\n821\r\n74A";
+                txtCmd.Text = "742\r\n743\r\n820\r\n821\r\n74A\r\n811";
             }
             else
             {
